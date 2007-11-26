@@ -53,7 +53,9 @@ BOOL isEdge(BoolMatrix* image, int x, int y, int nx, int ny);
   //	logicalSeeds[i] = 6 + i * (4 + 4 * version) / (sqrtCenters - 1);
   //	logicalSeeds[i] -= (logicalSeeds[i] - 2) % 4;
   //}
-  IntVector *logicalSeeds = [LogicalSeed getSeed:version];  
+  IntVector *logicalSeeds = [LogicalSeed getSeed:version];
+  NSLog(@"getSeed returned %x", logicalSeeds);
+  NSLog(@"Matrix: %dx%d", [logicalSeeds length]);
   IntPointMatrix *logicalCenters = [[IntPointMatrix alloc] initWithWidth: [logicalSeeds length] height: [logicalSeeds length]];
 			
   //create real relative coordinates
