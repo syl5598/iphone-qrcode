@@ -127,7 +127,7 @@ id<ProgressCallback> gProgress;
   mProgress = [[UIProgressBar alloc] initWithFrame:CGRectMake(40.0f, 230.0f, 240.0f, 20.0f)];
   [mainView addSubview: mProgress];
   
-  //[(NSData*)jpeg writeToFile:@"image.jpg" atomically:TRUE];
+  //  [(NSData*)jpeg writeToFile:@"image.jpg" atomically:TRUE];
   [preview retain];
   [NSThread detachNewThreadSelector:@selector(process:) toTarget:self withObject:preview];
 }

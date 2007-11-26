@@ -49,7 +49,7 @@ static int s37[] = {6, 32, 58, 84, 110, 136, 162};
 static int s38[] = {6, 26, 54, 82, 110, 138, 166};
 static int s39[] = {6, 30, 58, 86, 114, 142, 170};
 
-#define ADDELT(x,l) v = [IntVector fromArray: s##x count: l]; [nsa addObject: v]; [v release]
+#define ADDELT(x,l) v = [IntVector fromArray: s##x count: l]; [nsa addObject: v]
 
 @interface LogicalSeed (private)
 +(void)ensure;
@@ -118,15 +118,29 @@ static int s39[] = {6, 30, 58, 86, 114, 142, 170};
 +(IntVector*)getSeed: (int) version
 {
   [LogicalSeed ensure];
-  return [singleton->seed objectAtIndex: version-1];
+  if (!singleton || !singleton->seed)
+    {
+      NSLog(@"LogicalSeed singledton disappeared!");
+    }
+  IntVector *iv = [singleton->seed objectAtIndex: version-1];
+  return iv;
 }
 
 +(int)getSeed: (int) version pattern: (int) patternNumber
 {
   [LogicalSeed ensure];
+  if (!singleton || !singleton->seed)
+    {
+      NSLog(@"LogicalSeed singledton disappeared!");
+    }
   IntVector* iv = [singleton->seed objectAtIndex: version-1];
-  return [iv get: patternNumber];
+  if (!iv)
+    {
+      NSLog(@"Failed to get LogicalSeed instance");
+    }
+  int pn = [iv get: patternNumber];
+  return pn;
 }
 
-RETAIN_RELEASE(FinderPattern)
+RETAIN_RELEASE(LogicalSeed)
 @end
