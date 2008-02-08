@@ -139,17 +139,26 @@ id<ProgressCallback> gProgress;
   @try
     {
       QRCodeDecoder *decoder = [[QRCodeDecoder alloc] init];
-      [mProgress setProgress: .1f];
+      [mProgress setProgress: .33f];
       QRCodeImage *qrc = [[QRCodeImage alloc] init: picture];
-      [mProgress setProgress: .2f];
+      [mProgress setProgress: .67f];
       NSString *decodedString = [decoder decode: qrc];
 
       [qrc release];
       [decoder release];
+      
+      [mProgress setProgress: 1.0f];
 
       NSLog(@"String: %@", decodedString);
       [decodedString retain];
-      [self performSelectorOnMainThread:@selector(showSuccess:) withObject: decodedString waitUntilDone: NO];
+      if( [decodedString compare: @"http"] < 0 )
+      {
+	[self performSelectorOnMainThread:@selector(showSuccess:) withObject: decodedString waitUntilDone: NO];
+      }
+      else
+      {
+	[self performSelectorOnMainThread:@selector(showURL:) withObject: decodedString waitUntilDone: NO];
+      }
     }
   @catch (DecodingFailedException *de)
     {
@@ -167,7 +176,17 @@ id<ProgressCallback> gProgress;
 
 - (void)alertSheet:(UIAlertSheet*)sheet buttonClicked:(int)button
 {
-  [sheet dismiss];
+    if( [[sheet context] isKindOfClass: [NSURL class]] && button == 1)
+    {
+	NSURL*	url = [sheet context];
+	[self openURL: url];
+	[url release];
+	[sheet dismiss];
+    }
+    else
+    {
+	[sheet dismiss];
+    }
 }
 
 - (void)cameraControllerReadyStateChanged:(id)fp8
@@ -184,7 +203,7 @@ id<ProgressCallback> gProgress;
 - (void) showSuccess: (NSString*) result
 {
   // Alert sheet displayed at centre of screen.
-  NSArray *buttons = [NSArray arrayWithObjects:@"OK", @"Cancel", nil];
+  NSArray *buttons = [NSArray arrayWithObjects:@"Dismiss", nil];
   UIAlertSheet *alertSheet = [[UIAlertSheet alloc] initWithTitle:@"Success!" buttons:buttons defaultButtonIndex:1 delegate: self context: self];
   if (result)
     {
@@ -194,13 +213,36 @@ id<ProgressCallback> gProgress;
   [result release];
 }
 
+- (void) showURL: (NSString*) url
+{
+    NSString *theMessage = @"URL decoded. Would you like to visit ";
+    NSArray *buttons = [NSArray arrayWithObjects:@"Visit", @"Cancel", nil];
+    NSURL* theURL = [NSURL URLWithString: url];
+    
+    [theURL retain];
+    
+    UIAlertSheet *alertSheet = [[UIAlertSheet alloc] initWithTitle:@"Success!" buttons:buttons defaultButtonIndex:1 delegate: self context: theURL];
+    
+    // Form our dialog message
+    theMessage = [theMessage stringByAppendingString: url];
+    theMessage = [theMessage stringByAppendingString: @"?"];
+    
+    if( url )
+    {
+	[alertSheet setBodyText: theMessage];
+    }
+    [alertSheet popupAlertAnimated:YES];
+    [url release];
+}
+
 - (void) showFailure: (NSString*) result
 {
   // Alert sheet displayed at centre of screen.
-  NSArray *buttons = [NSArray arrayWithObjects:@"Try Again", @"Cancel", nil];
+  NSArray *buttons = [NSArray arrayWithObjects:@"Dismiss", nil];
   UIAlertSheet *alertSheet = [[UIAlertSheet alloc] initWithTitle:@"Unreadable" buttons:buttons defaultButtonIndex:1 delegate:self context:self];
   [alertSheet setBodyText:@"Sorry, we could not read the QR Code."];
   [alertSheet popupAlertAnimated:YES];
+  [result release];
 }
 
 -(void)setProgress: (float) progress

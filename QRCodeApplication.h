@@ -27,6 +27,7 @@
 - (void)alertSheet:(UIAlertSheet*)sheet buttonClicked:(int)button;
 
 - (void) showSuccess: (NSString*) result;
+- (void) showURL:     (NSString*) url;
 - (void) showFailure: (NSString*) result;
 @end
 
