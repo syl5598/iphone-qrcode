@@ -95,21 +95,22 @@ id<ProgressCallback> gProgress;
 
 - (id) createButton
 {
-  UIPushButton *button = [[UIPushButton alloc] initWithFrame: CGRectMake(0.0f, 407.0f, 100.0f, 60.0f)];
-  NSString *onFile = [NSString stringWithFormat:@"/Applications/QRDecode.app/snap_down.png"];
-  UIImage* on = [[UIImage alloc] initWithContentsOfFile: onFile];
-  [button setImage:on forState:1];
-  NSString *offFile = [NSString	stringWithFormat:@"/Applications/QRDecode.app/snap.png"];
-  UIImage* off = [[UIImage alloc] initWithContentsOfFile: offFile];
-  [button setImage:off forState:0];
-  [button setEnabled:YES];
-  [button setDrawContentsCentered:YES];
-  [button setAutosizesToFit:NO];
-  [button setNeedsDisplay];
-  [button addTarget:self action:@selector(takePicture:) forEvents:255];
-  [on release];
-  [off release];
-  return button;
+    UIPushButton *button = [[UIPushButton alloc] initWithFrame: CGRectMake(0.0f, 407.0f, 100.0f, 60.0f)];
+    NSString *onFile = [NSString stringWithFormat:@"/Applications/QRDecode.app/snap_down.png"];
+    UIImage* on = [[UIImage alloc] initWithContentsOfFile: onFile];
+    [button setImage:on forState:1];
+    NSString *offFile = [NSString	stringWithFormat:@"/Applications/QRDecode.app/snap.png"];
+    UIImage* off = [[UIImage alloc] initWithContentsOfFile: offFile];
+    [button setImage:off forState:0];
+    [button setEnabled:YES];
+    [button setDrawContentsCentered:YES];
+    [button setAutosizesToFit:NO];
+    [button setNeedsDisplay];
+    [button setShowPressFeedback: YES];
+    [button addTarget:self action:@selector(takePicture:) forEvents:255];
+    [on release];
+    [off release];
+    return button;
 }
 
 -(void)takePicture:(id)sender
