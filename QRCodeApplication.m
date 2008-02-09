@@ -113,10 +113,12 @@ id<ProgressCallback> gProgress;
 
 -(void)takePicture:(id)sender
 {
-  if (!inRun)
+    // Turn the take-picture button off so we do not snap multiple pics at once.
+    [snap setEnabled: NO];
+    if (!inRun)
     {
-      [cameraView _playShutterSound];
-      [camController capturePhoto];
+	[cameraView _playShutterSound];
+	[camController capturePhoto];
     }
 }
 
@@ -187,6 +189,8 @@ id<ProgressCallback> gProgress;
     {
 	[sheet dismiss];
     }
+    // Turn the snap button back on to take the next picture.
+    [snap setEnabled: YES];
 }
 
 - (void)cameraControllerReadyStateChanged:(id)fp8
