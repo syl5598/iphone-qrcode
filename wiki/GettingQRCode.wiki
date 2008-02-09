@@ -2,14 +2,23 @@
 
 = Introduction =
 
-QRDecode is not currently available in any Installer repository, and needs to be compiled. For experienced developers, you will need the following:
+There are currently two ways to get QRDecode:
+
+  * Install it from Installer
+  * Compile it yourself.
+
+To get it from installer, add the following repository to your installer (tap on "Sources" in installer, then "Edit", then "Add"):
+
+  * http://www.jerrywong.net/iphone/
+
+To compile it yourself, you will need the following:
 
   * A working development toolchain (Google around for this if you don't have it)
   * A copy of iphone-qrcode (see the "Source" tab at the top of this page)
   * OpenSSH and BSD Subsystem intalled on your jailbroken iPhone
   * A command line (on OS X, Linux, or Cygwin in Windows)
 
-= Instructions =
+= Compile Instructions =
 
 Great, you have everything described above. Go to your command line:
   * cd directory_you_have_the_code
