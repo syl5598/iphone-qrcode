@@ -4,6 +4,9 @@
 #import <UIKit/UIKit.h>
 #import <UIKit/UIApplication.h>
 #import <UIKit/UIProgressBar.h>
+#import <UIKit/UIProgressIndicator.h>
+#import <UIKit/UIProgressHUD.h>
+#import <UIKit/UIWindow.h>
 
 #import "QRCommon.h"
 
@@ -15,8 +18,9 @@
   CameraController* camController;
   UIPushButton *snap;
   UIView *mainView;
+  UIProgressIndicator *mProgress;
+  UIWindow *mWindow;
   BOOL inRun;
-  UIProgressBar* mProgress;
 }
 
 +(QRCodeApplication*)application;
@@ -24,7 +28,7 @@
 - (id) createButton;
 - (void) takePicture:(id)sender;
 - (void) process: (UIImage*) picture;
-- (void)alertSheet:(UIAlertSheet*)sheet buttonClicked:(int)button;
+- (void) alertSheet:(UIAlertSheet*)sheet buttonClicked:(int)button;
 
 - (void) showSuccess: (NSString*) result;
 - (void) showURL:     (NSString*) url;
