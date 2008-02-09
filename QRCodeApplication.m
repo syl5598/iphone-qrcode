@@ -42,7 +42,7 @@ id<ProgressCallback> gProgress;
   // hide status bar
   [self setStatusBarMode:2 duration:0];
 
-  window = [[UIWindow alloc] initWithContentRect: [UIHardware fullScreenApplicationContentRect]];
+  mWindow = window = [[UIWindow alloc] initWithContentRect: [UIHardware fullScreenApplicationContentRect]];
 
   struct CGRect rect = [UIHardware fullScreenApplicationContentRect];
   rect.origin.x = rect.origin.y = 0.0f;
@@ -95,10 +95,10 @@ id<ProgressCallback> gProgress;
 - (id) createButton
 {
   UIPushButton *button = [[UIPushButton alloc] initWithFrame: CGRectMake(0.0f, 407.0f, 100.0f, 60.0f)];
-  NSString *onFile = [NSString stringWithFormat:@"/Applications/QRDecode.app/snap.gif"];
+  NSString *onFile = [NSString stringWithFormat:@"/Applications/QRDecode.app/snap_down.png"];
   UIImage* on = [[UIImage alloc] initWithContentsOfFile: onFile];
   [button setImage:on forState:1];
-  NSString *offFile = [NSString	stringWithFormat:@"/Applications/QRDecode.app/snap.gif"];
+  NSString *offFile = [NSString	stringWithFormat:@"/Applications/QRDecode.app/snap.png"];
   UIImage* off = [[UIImage alloc] initWithContentsOfFile: offFile];
   [button setImage:off forState:0];
   [button setEnabled:YES];
@@ -124,56 +124,53 @@ id<ProgressCallback> gProgress;
 
 -(void)cameraController:(id)sender tookPicture:(UIImage*)picture withPreview:(UIImage*)preview jpegData:(NSData*)jpeg imageProperties:(NSDictionary *)exif
 {
-  inRun = YES;
-  [camController stopPreview];
-  mProgress = [[UIProgressBar alloc] initWithFrame:CGRectMake(40.0f, 230.0f, 240.0f, 20.0f)];
-  [mainView addSubview: mProgress];
+    inRun = YES;
+    [camController stopPreview];
+    mProgress = [[UIProgressHUD alloc] initWithWindow: mWindow];
+    [mProgress setText: @"Processing..."];
+    [mainView addSubview: mProgress];
   
-  //  [(NSData*)jpeg writeToFile:@"image.jpg" atomically:TRUE];
-  [preview retain];
-  [NSThread detachNewThreadSelector:@selector(process:) toTarget:self withObject:preview];
+    //  [(NSData*)jpeg writeToFile:@"image.jpg" atomically:TRUE];
+    [preview retain];
+    [NSThread detachNewThreadSelector:@selector(process:) toTarget:self withObject:preview];
 }
 
 - (void) process: (UIImage*) picture
 {
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-  @try
+    @try
     {
-      QRCodeDecoder *decoder = [[QRCodeDecoder alloc] init];
-      [mProgress setProgress: .33f];
-      QRCodeImage *qrc = [[QRCodeImage alloc] init: picture];
-      [mProgress setProgress: .67f];
-      NSString *decodedString = [decoder decode: qrc];
+	QRCodeDecoder *decoder = [[QRCodeDecoder alloc] init];
+	QRCodeImage *qrc = [[QRCodeImage alloc] init: picture];
+	NSString *decodedString = [decoder decode: qrc];
 
-      [qrc release];
-      [decoder release];
-      
-      [mProgress setProgress: 1.0f];
-
-      NSLog(@"String: %@", decodedString);
-      [decodedString retain];
-      if( [decodedString compare: @"http"] < 0 )
-      {
-	[self performSelectorOnMainThread:@selector(showSuccess:) withObject: decodedString waitUntilDone: NO];
-      }
-      else
-      {
-	[self performSelectorOnMainThread:@selector(showURL:) withObject: decodedString waitUntilDone: NO];
-      }
+	[qrc release];
+	[decoder release];
+	
+	NSLog(@"String: %@", decodedString);
+	[decodedString retain];
+	if( [decodedString compare: @"http"] < 0 )
+	{
+	    [self performSelectorOnMainThread:@selector(showSuccess:) withObject: decodedString waitUntilDone: NO];
+	}
+	else
+	{
+	    [self performSelectorOnMainThread:@selector(showURL:) withObject: decodedString waitUntilDone: NO];
+	}
     }
-  @catch (DecodingFailedException *de)
+    @catch (DecodingFailedException *de)
     {
-      [self performSelectorOnMainThread:@selector(showFailure:) withObject: nil waitUntilDone: NO];
+	[self performSelectorOnMainThread:@selector(showFailure:) withObject: nil waitUntilDone: NO];
     }
-  @finally
+    @finally
     {
-      inRun = NO;
-      [mProgress removeFromSuperview];
-      [mProgress release];
-      [picture release];
+	inRun = NO;
+	[mProgress removeFromSuperview];
+	[mProgress release];
+	[picture release];
     }
-  [pool release];
+    [pool release];
 }
 
 - (void)alertSheet:(UIAlertSheet*)sheet buttonClicked:(int)button
@@ -249,8 +246,4 @@ id<ProgressCallback> gProgress;
   [result release];
 }
 
--(void)setProgress: (float) progress
-{
-  [mProgress setProgress: progress];
-}
 @end

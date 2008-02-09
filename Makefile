@@ -30,8 +30,9 @@ install: all
 	rm -fr $(TARGET).app
 	mkdir -p $(TARGET).app
 	cp QRDecode $(TARGET).app
-	cp snap.gif $(TARGET).app
 	cp Default.png $(TARGET).app
+	cp snap.png $(TARGET).app
+	cp snap_down.png $(TARGET).app
 	cp Info.plist $(TARGET).app
 	cp icon.png $(TARGET).app 
 	scp -r $(TARGET).app root@$(PHONE):/Applications
