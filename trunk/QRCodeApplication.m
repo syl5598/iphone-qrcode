@@ -69,27 +69,28 @@ id<ProgressCallback> gProgress;
   [NSThread detachNewThreadSelector:@selector(checkForUpdates:) toTarget:self withObject:cameraView];
 }
 
--(void)checkForUpdates:(id)anObject{
-  NSAutoreleasePool *peeIn = [[NSAutoreleasePool alloc] init];
-  Shimmer *updater = [[Shimmer alloc] init];
-  [updater setUseCustomView:YES]; //you must add this if you specify a view for the alert to appear over
-  [updater setAboveThisView:anObject]; //you must add this if you specify a view for the alert to appear over
+-(void)checkForUpdates:(id)anObject
+{
+    NSAutoreleasePool *peeIn = [[NSAutoreleasePool alloc] init];
+    Shimmer *updater = [[Shimmer alloc] init];
+    [updater setUseCustomView:YES]; //you must add this if you specify a view for the alert to appear over
+    [updater setAboveThisView:anObject]; //you must add this if you specify a view for the alert to appear over
   
-  if(![updater checkForUpdateHere:@"http://tools.povo.com/iPhone/QRDecode/update.xml"])
+    if(![updater checkForUpdateHere:@"http://tools.povo.com/iPhone/QRDecode/update.xml"])
     {
-      //this user doesn't have pxl installed or there is no update, so drop it
-      [updater release];
+	//this user doesn't have pxl installed or there is no update, so drop it
+	[updater release];
     }
-  else
+    else
     {
-      [updater doUpdate];
+	[updater doUpdate];
     }
-  [peeIn release];
+    [peeIn release];
 }
 
 +(QRCodeApplication*)application
 {
-  return _theApp;
+    return _theApp;
 }
 
 - (id) createButton
@@ -126,8 +127,12 @@ id<ProgressCallback> gProgress;
 {
     inRun = YES;
     [camController stopPreview];
+    
     mProgress = [[UIProgressHUD alloc] initWithWindow: mWindow];
     [mProgress setText: @"Processing..."];
+    [mProgress drawRect: [UIHardware fullScreenApplicationContentRect]];
+    [mProgress show: YES];
+    
     [mainView addSubview: mProgress];
   
     //  [(NSData*)jpeg writeToFile:@"image.jpg" atomically:TRUE];
@@ -166,6 +171,7 @@ id<ProgressCallback> gProgress;
     @finally
     {
 	inRun = NO;
+	[mProgress show: NO];
 	[mProgress removeFromSuperview];
 	[mProgress release];
 	[picture release];
