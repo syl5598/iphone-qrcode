@@ -119,6 +119,7 @@ id<ProgressCallback> gProgress;
     [snap setEnabled: NO];
     if (!inRun)
     {
+	inRun = YES;
 	[cameraView _playShutterSound];
 	[camController capturePhoto];
     }
@@ -126,7 +127,6 @@ id<ProgressCallback> gProgress;
 
 -(void)cameraController:(id)sender tookPicture:(UIImage*)picture withPreview:(UIImage*)preview jpegData:(NSData*)jpeg imageProperties:(NSDictionary *)exif
 {
-    inRun = YES;
     [camController stopPreview];
     
     mProgress = [[UIProgressHUD alloc] initWithWindow: mWindow];
@@ -185,6 +185,7 @@ id<ProgressCallback> gProgress;
     if( [[sheet context] isKindOfClass: [NSURL class]] && button == 1)
     {
 	NSURL*	url = [sheet context];
+	[camController stopPreview];
 	[self openURL: url];
 	[url release];
 	[sheet dismiss];
