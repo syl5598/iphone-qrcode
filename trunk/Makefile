@@ -1,7 +1,7 @@
 LDFLAGS=-Wl -lobjc -framework CoreFoundation -framework Foundation -framework CoreGraphics -framework UIKit -framework LayerKit -framework PhotoLibrary -framework Camera
 EXTRAOBJS = QRCameraView.o QRCodeApplication.o Shimmer.o
 CC=arm-apple-darwin-gcc
-CFLAGS=-Wall
+CFLAGS=-Wall -g
 #CC=gcc
 #LDFLAGS=-Wl -ljpeg -lobjc -framework CoreFoundation -framework Foundation -framework ApplicationServices
 #CFLAGS=-DDEBUG -DNOTPHONE -fobjc-exceptions -g -Wall

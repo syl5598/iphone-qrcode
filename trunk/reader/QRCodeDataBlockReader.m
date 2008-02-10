@@ -307,9 +307,9 @@ ByteVector* addToOutput(ByteVector* v, byte *b, int count)
 	{
 	  mask1 += (1 << i);
 	}
-      bits = ([blocks get:blockPointer] & mask1) << numBits - (bitPointer + 1);
+      bits = ([blocks get:blockPointer] & mask1) << (numBits - (bitPointer + 1));
       blockPointer++;
-      bits += [blocks get:blockPointer] >> 8 - (numBits - (bitPointer + 1));
+      bits += [blocks get:blockPointer] >> (8 - (numBits - (bitPointer + 1)));
       
       bitPointer = bitPointer - numBits % 8;
       if (bitPointer < 0)

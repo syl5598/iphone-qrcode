@@ -13,12 +13,12 @@
 @class QRCameraView;
 @class CameraController;
 
-@interface QRCodeApplication : UIApplication <ProgressCallback> {
+@interface QRCodeApplication : UIApplication {
   QRCameraView *cameraView;
   CameraController* camController;
   UIPushButton *snap;
   UIView *mainView;
-  UIProgressIndicator *mProgress;
+  UIProgressHUD *mProgress;
   UIWindow *mWindow;
   BOOL inRun;
 }

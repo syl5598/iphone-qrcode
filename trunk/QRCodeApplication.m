@@ -36,7 +36,7 @@ id<ProgressCallback> gProgress;
 {
   inRun = NO;
   _theApp = self;
-  gProgress = self;
+  //gProgress = self;
   UIWindow *window;
 
   // hide status bar
@@ -133,16 +133,19 @@ id<ProgressCallback> gProgress;
     [mProgress setText: @"Processing..."];
     [mProgress drawRect: [UIHardware fullScreenApplicationContentRect]];
     [mProgress show: YES];
-    
+
     [mainView addSubview: mProgress];
   
     //  [(NSData*)jpeg writeToFile:@"image.jpg" atomically:TRUE];
     [preview retain];
+
     [NSThread detachNewThreadSelector:@selector(process:) toTarget:self withObject:preview];
 }
 
 - (void) process: (UIImage*) picture
 {
+    [picture retain];
+
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
     @try
@@ -153,7 +156,7 @@ id<ProgressCallback> gProgress;
 
 	[qrc release];
 	[decoder release];
-	
+
 	NSLog(@"String: %@", decodedString);
 	[decodedString retain];
 	if( [decodedString compare: @"http"] < 0 )
