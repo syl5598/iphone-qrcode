@@ -10,7 +10,7 @@ PHONE=maxiphone
 TARGET=QRDecode
 LD=$(CC) -macosx_version_min=10.4u
 
-all: $(TARGET)
+all: package
 
 $(TARGET): ValueMatrix.o data/QRCodeImage.o data/QRCodeSymbol.o ecc/BCH15_5.o ecc/ReedSolomon.o \
 	geom/Line.o geom/Axis.o geom/IntPointHelper.o geom/SamplingGrid.o \
@@ -26,13 +26,16 @@ $(TARGET): ValueMatrix.o data/QRCodeImage.o data/QRCodeSymbol.o ecc/BCH15_5.o ec
 clean:
 	find . -name "*.o" -print | xargs rm
 
+package: $(TARGET)
+	@echo Assembling .app package...
+	@rm -fr $(TARGET).app
+	@mkdir -p $(TARGET).app
+	@cp QRDecode $(TARGET).app
+	@cp Default.png $(TARGET).app
+	@cp snap.png $(TARGET).app
+	@cp snap_down.png $(TARGET).app
+	@cp Info.plist $(TARGET).app
+	@cp icon.png $(TARGET).app 
+
 install: all
-	rm -fr $(TARGET).app
-	mkdir -p $(TARGET).app
-	cp QRDecode $(TARGET).app
-	cp Default.png $(TARGET).app
-	cp snap.png $(TARGET).app
-	cp snap_down.png $(TARGET).app
-	cp Info.plist $(TARGET).app
-	cp icon.png $(TARGET).app 
 	scp -r $(TARGET).app root@$(PHONE):/Applications

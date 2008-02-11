@@ -249,12 +249,16 @@ id<ProgressCallback> gProgress;
 
 - (void) showFailure: (NSString*) result
 {
-  // Alert sheet displayed at centre of screen.
-  NSArray *buttons = [NSArray arrayWithObjects:@"Dismiss", nil];
-  UIAlertSheet *alertSheet = [[UIAlertSheet alloc] initWithTitle:@"Unreadable" buttons:buttons defaultButtonIndex:1 delegate:self context:self];
-  [alertSheet setBodyText:@"Sorry, we could not read the QR Code."];
-  [alertSheet popupAlertAnimated:YES];
-  [result release];
+    // Alert sheet displayed at centre of screen.
+    NSArray *buttons = [NSArray arrayWithObjects:@"Dismiss", nil];
+    UIAlertSheet *alertSheet = [[UIAlertSheet alloc] initWithTitle:@"Unreadable" buttons:buttons defaultButtonIndex:1 delegate:self context:self];
+    [alertSheet setBodyText:@"Sorry, we could not read the QR Code."];
+    int orient = [UIHardware deviceOrientation: YES];
+    [alertSheet popupAlertAnimated:YES];
+    [alertSheet _reorientAlertWindowTo: orient animated: YES];
+    //NSLog(@"UI Orientation: %d", orient);
+    //[alertSheet _layoutPopupAlertWithOrientation:orient animated:YES];
+    [result release];
 }
 
 @end
