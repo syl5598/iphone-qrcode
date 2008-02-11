@@ -10,6 +10,17 @@
 
 #import "QRCommon.h"
 
+enum PHONE_ORIENTATION
+{
+    ORIENT_UP = 0,
+    ORIENT_NORMAL,
+    ORIENT_INVERTED,
+    ORIENT_LEFT,
+    ORIENT_RIGHT,
+    ORIENT_NA,
+    ORIENT_DOWN
+};
+
 @class QRCameraView;
 @class CameraController;
 

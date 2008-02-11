@@ -758,12 +758,12 @@ static int VersionInfoBit[] = {
     }
   //canvas.drawPoints(points, ThoughtWorks.QRCode.Codec.Util.Color_Fields.RED);
   
-  int exactVersion = 0;
-  @try
+    int exactVersion = 0;
+    @try
     {
       exactVersion = [self checkVersionInfo: versionInformation];
     }
-  @catch (InvalidVersionInfoException *e)
+    @catch (InvalidVersionInfoException *e)
     {
       //canvas.println("Version info error. now retry with other place one.");
       NSLog(@"Version info error. now retry with other place one.");
@@ -781,16 +781,16 @@ static int VersionInfoBit[] = {
 	}
       //canvas.drawPoints(points, ThoughtWorks.QRCode.Codec.Util.Color_Fields.RED);
       
-      @try
+	@try
 	{
-	  exactVersion = [self checkVersionInfo: versionInformation];
+	    exactVersion = [self checkVersionInfo: versionInformation];
 	}
-      @catch (VersionInformationException *e2)
+	@catch (VersionInformationException *e2)
 	{
-	  @throw;
+	    @throw;
 	}
     }
-  return exactVersion;
+    return exactVersion;
 }
 
 +(int)checkVersionInfo: (BOOL*) target
