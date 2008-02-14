@@ -1,4 +1,4 @@
-LDFLAGS=-Wl -lobjc -framework CoreFoundation -framework Foundation -framework CoreGraphics -framework UIKit -framework LayerKit -framework PhotoLibrary -framework Camera
+LDFLAGS=-Wl -lobjc libqrencode.dylib -framework CoreFoundation -framework Foundation -framework CoreGraphics -framework UIKit -framework LayerKit -framework PhotoLibrary -framework Camera
 EXTRAOBJS = QRCameraView.o QRCodeApplication.o Shimmer.o
 CC=arm-apple-darwin-gcc
 CFLAGS=-Wall -g
